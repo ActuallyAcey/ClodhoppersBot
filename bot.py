@@ -26,16 +26,18 @@ async def on_ready ():
 @bot.event
 async def on_message(message):
     channel = message.channel
-    
-    if channel.id == bot_secrets.FEEDBACK_CHANNEL:
-        command_word = message.content.split(' ', 1)[0]
-        if command_word.lower() == "bug:":
-            await channel.send(f'Recorded a bug!')
-        elif command_word.lower() == "feature:":
-            await channel.send(f'Recorded a feature request!')
 
-    #if not message.author.bot and (channel.id == bot_secrets.FEEDBACK_CHANNEL):
-    #    await channel.send(f'Recorded: {message.content}')
+    if channel.id == bot_secrets.FEEDBACK_CHANNEL:
+        trigger_word = message.content.split(' ', 1)[0]
+        request_content = message.content.split(' ', 1)[1] #Stackoverflow ftw
+        if trigger_word.lower() == "bug:":
+            await channel.send(f'Recorded a bug! `{request_content}`')
+        elif trigger_word.lower() == "request:":
+            await channel.send(f'Recorded a request! `{request_content}`')
+
+            # Send request_content, message.author and a timestamp to Google Docs
+            #...somehow. 
+
     await bot.process_commands(message)
 
 
