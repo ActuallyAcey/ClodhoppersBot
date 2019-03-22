@@ -12,8 +12,7 @@ TOKEN = bot_secrets.TOKEN
 bot = commands.Bot(command_prefix="!", description=DESCRIPTION)
 
 # this specifies what extensions to load when the bot starts up
-startup_extensions = ["cogs.misc",
-                      "cogs.moderation"]
+startup_extensions = ["cogs.moderation"]
 
 # <------ Events ------>
 @bot.event
@@ -26,6 +25,9 @@ async def on_ready ():
 
 @bot.event
 async def on_message(message):
+    channel = message.channel
+    if not message.author.bot and (channel.id == bot_secrets.FEEDBACK_CHANNEL):
+        await channel.send(f'Recorded: {message.content}')
     await bot.process_commands(message)
 
 
