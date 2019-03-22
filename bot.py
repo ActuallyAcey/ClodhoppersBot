@@ -17,7 +17,7 @@ startup_extensions = ["cogs.moderation"]
 # <------ Events ------>
 @bot.event
 async def on_ready ():
-    print('Logged in.')
+    print('Started up successfully.')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
@@ -26,8 +26,16 @@ async def on_ready ():
 @bot.event
 async def on_message(message):
     channel = message.channel
-    if not message.author.bot and (channel.id == bot_secrets.FEEDBACK_CHANNEL):
-        await channel.send(f'Recorded: {message.content}')
+    
+    if channel.id == bot_secrets.FEEDBACK_CHANNEL:
+        command_word = message.content.split(' ', 1)[0]
+        if command_word.lower() == "bug:":
+            await channel.send(f'Recorded a bug!')
+        elif command_word.lower() == "feature:":
+            await channel.send(f'Recorded a feature request!')
+
+    #if not message.author.bot and (channel.id == bot_secrets.FEEDBACK_CHANNEL):
+    #    await channel.send(f'Recorded: {message.content}')
     await bot.process_commands(message)
 
 
