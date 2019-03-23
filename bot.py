@@ -3,6 +3,7 @@ from discord.ext import commands
 import sys
 import traceback
 import bot_secrets
+import sheets
 
 # Globala
 
@@ -30,8 +31,12 @@ async def on_message(message):
     if channel.id == bot_secrets.FEEDBACK_CHANNEL:
         trigger_word = message.content.split(' ', 1)[0]
         request_content = message.content.split(' ', 1)[1] #Stackoverflow ftw
+        user = message.author.name
+
         if trigger_word.lower() == "bug:":
+            sheets.send_error_entry(user, request_content)
             await channel.send(f'Recorded a bug! `{request_content}`')
+        
         elif trigger_word.lower() == "request:":
             await channel.send(f'Recorded a request! `{request_content}`')
 
