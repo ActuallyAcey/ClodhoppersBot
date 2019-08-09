@@ -38,6 +38,7 @@ async def on_message(message):
             await channel.send(f'Recorded a bug! `{request_content}`')
         
         elif trigger_word.lower() == "request:":
+            sheets.send_request_entry(user, request_content)
             await channel.send(f'Recorded a request! `{request_content}`')
 
             # Send request_content, message.author and a timestamp to Google Docs

@@ -11,6 +11,7 @@ sheet = gc.open('Clodhopper Bot')
 print ("Sheet authorization successful.")
 
 error_sheet = sheet.get_worksheet(0)
+request_sheet = sheet.get_worksheet(1)
 print ("Opening sheets successful.")
 
 def send_error_entry(user : str, content : str):
@@ -21,4 +22,13 @@ def send_error_entry(user : str, content : str):
     error_sheet.append_row(entry)
     
     error_sheet.update_acell('B1', str(error_ticket_number + 1))
+
+def send_request_entry(user : str, content : str):
+    #Entry structure: Username/Timestamp/Ticket/Content
+    request_ticket_number = int(request_sheet.acell('B1').value)
+    date = time.strftime("%d %b %Y", time.gmtime())
+    entry = [user, date, f'{request_ticket_number}', content]
+    request_sheet.append_row(entry)
+    
+    request_sheet.update_acell('B1', str(request_ticket_number + 1))
 
