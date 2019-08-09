@@ -1,14 +1,13 @@
-import discord
 from discord.ext import commands
 import sys
 import traceback
 import bot_secrets
-import sheets
+import bot_sheets as sheets
 
 # Globala
 
 DESCRIPTION = ""
-TOKEN = bot_secrets.TOKEN
+TOKEN = bot_secrets.DISCORD_TOKEN
 
 bot = commands.Bot(command_prefix="!", description=DESCRIPTION)
 
@@ -26,23 +25,27 @@ async def on_ready ():
 
 @bot.event
 async def on_message(message):
+    # Scan all messages in selected servers for bug or feature request, since these aren't commands per se
     channel = message.channel
+    game_id = None
 
-    if channel.id == bot_secrets.FEEDBACK_CHANNEL:
+    if channel.id in bot_secrets.EUFLORIA_FEEDBACK_CHANNEL_LIST:
+        game_id = 1
+    elif channel.id in bot_secrets.CLODHOPPER_FEEDBACK_CHANNEL_LIST:
+        game_id = 2
+
+    if game_id is not None:
         trigger_word = message.content.split(' ', 1)[0]
         request_content = message.content.split(' ', 1)[1] #Stackoverflow ftw
         user = message.author.name
 
         if trigger_word.lower() == "bug:":
-            sheets.send_error_entry(user, request_content)
+            sheets.send_error_entry(user, request_content, game_id)
             await channel.send(f'Recorded a bug! `{request_content}`')
         
         elif trigger_word.lower() == "request:":
-            sheets.send_request_entry(user, request_content)
+            sheets.send_request_entry(user, request_content, game_id)
             await channel.send(f'Recorded a request! `{request_content}`')
-
-            # Send request_content, message.author and a timestamp to Google Docs
-            #...somehow. 
 
     await bot.process_commands(message)
 
