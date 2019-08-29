@@ -5,8 +5,6 @@ import time
 scope = ['http://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 credentials = ServiceAccountCredentials.from_json_keyfile_name('creds.json', scope)
 
-
-
 def initialize_sheets():
     
     gc = gspread.authorize(credentials)

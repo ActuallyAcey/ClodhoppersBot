@@ -6,7 +6,7 @@ import bot_sheets
 
 # Globala
 
-DESCRIPTION = ""
+DESCRIPTION = "Howdy! I'm Cletus Clay, the official bot on Claymatics' Dicsord Server!"
 TOKEN = bot_secrets.DISCORD_TOKEN
 
 bot = commands.Bot(command_prefix="!", description=DESCRIPTION)
