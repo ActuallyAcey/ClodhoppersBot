@@ -2,7 +2,7 @@ from discord.ext import commands
 import sys
 import traceback
 import bot_secrets
-import bot_sheets as sheets
+import bot_sheets
 
 # Globala
 
@@ -17,10 +17,12 @@ startup_extensions = ["cogs.moderation"]
 # <------ Events ------>
 @bot.event
 async def on_ready ():
+    
     print('Started up successfully.')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
+    bot_sheets.initialize_sheets()
 
 
 @bot.event
@@ -30,22 +32,23 @@ async def on_message(message):
     game_id = None
 
     if channel.id in bot_secrets.EUFLORIA_FEEDBACK_CHANNEL_LIST:
-        game_id = 1
+        game_name = "Eufloria"
     elif channel.id in bot_secrets.CLODHOPPER_FEEDBACK_CHANNEL_LIST:
-        game_id = 2
+        game_name = "Clodhoppers"
 
     if game_id is not None:
         trigger_word = message.content.split(' ', 1)[0]
-        request_content = message.content.split(' ', 1)[1] #Stackoverflow ftw
-        user = message.author.name
+        report_content = message.content.split(' ', 1)[1] #Stackoverflow ftw
+        user = message.author.name        
 
-        if trigger_word.lower() == "bug:":
-            sheets.send_error_entry(user, request_content, game_id)
-            await channel.send(f'Recorded a bug! `{request_content}`')
-        
+        if trigger_word.lower() == "bug:":       
+            val = bot_sheets.send_new_report(user, report_content, game_name, 'bug')
+            await channel.send(f'Bug recorded! Your ticket number is `{val}`')
+
         elif trigger_word.lower() == "request:":
-            sheets.send_request_entry(user, request_content, game_id)
-            await channel.send(f'Recorded a request! `{request_content}`')
+            val = bot_sheets.send_new_report(user, report_content, game_name, 'request')
+            await channel.send(f'Request recorded! Your ticket number is `{val}`')
+
 
     await bot.process_commands(message)
 

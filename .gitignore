@@ -3,3 +3,4 @@ env/
 __pycache__/
 bot_secrets.py
 creds.json
+*.pem
