@@ -15,6 +15,8 @@ def initialize_sheets():
     initialize_sheets.clodhopper_request_sheet = sheet.worksheet("Clod Requests")
     initialize_sheets.eufloria_error_sheet = sheet.worksheet("Eufloria Errors")
     initialize_sheets.eufloria_request_sheet = sheet.worksheet("Eufloria Requests")
+    initialize_sheets.platypus_error_sheet = sheet.worksheet("Platypus Errors")
+    initialize_sheets.platypus_request_sheet = sheet.worksheet("Platypus Requests")
 
     # functions are also objects, so with dynamic typing, they can allow a very hacky way to access local vars from other functions
 
@@ -35,6 +37,13 @@ def send_new_report (user, report_content, reported_game, report_type):
 
         elif report_type == 'request':
             working_sheet = initialize_sheets.eufloria_request_sheet
+
+    if reported_game == 'Platypus':
+        if report_type == 'bug':
+            working_sheet = initialize_sheets.platypus_error_sheet
+
+        elif report_type == 'request':
+            working_sheet = initialize_sheets.platypus_request_sheet
 
     try:
         ticket_number = int(working_sheet.acell('B1').value)
