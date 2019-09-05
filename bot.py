@@ -29,14 +29,16 @@ async def on_ready ():
 async def on_message(message):
     # Scan all messages in selected servers for bug or feature request, since these aren't commands per se
     channel = message.channel
-    game_id = None
+    game_name = None
 
     if channel.id in bot_secrets.EUFLORIA_FEEDBACK_CHANNEL_LIST:
         game_name = "Eufloria"
     elif channel.id in bot_secrets.CLODHOPPER_FEEDBACK_CHANNEL_LIST:
         game_name = "Clodhoppers"
+    elif channel.id in bot_secrets.PLATYPUS_FEEDBACK_CHANNEL_LIST:
+        game_name = "Platypus"    
 
-    if game_id is not None:
+    if game_name is not None:
         trigger_word = message.content.split(' ', 1)[0]
         report_content = message.content.split(' ', 1)[1] #Stackoverflow ftw
         user = message.author.name        
